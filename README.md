@@ -25,7 +25,7 @@
 ## 🖼️ واجهة المشروع
 
 ### صفحة التسجيل
-![Register and Login Page](assets\pageHTML.png)
+![Register and Login Page](assets/pageHTML.png)
 
 ---
 
