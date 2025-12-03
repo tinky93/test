@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register and Login</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+        }
+
+        .form-box {
+            width: 300px;
+            margin: 30px auto;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+        }
+
+        input {
+            width: 100%;
+            padding: 8px;
+            margin: 8px 0;
+            box-sizing: border-box;
+        }
+
+        button {
+            padding: 10px;
+            width: 100%;
+            cursor: pointer;
+        }
+
+        .error-message {
+            color: red;
+            margin-top: 10px;
+            font-size: 14px;
+            display: none;
+        }
+
+        .success-message {
+            color: green;
+            margin-top: 10px;
+            font-size: 14px;
+            display: none;
+        }
+
+        h2 {
+            text-align: center;
+        }
+
+        .divider {
+            text-align: center;
+            margin: 20px 0;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ===== Register ===== -->
+    <div class="form-box">
+        <h2>Register</h2>
+        <form id="registerForm">
+            <input type="text" id="reg_username" placeholder="Username" /><br>
+            <input type="email" id="reg_email" placeholder="Email" /><br>
+            <input type="password" id="reg_password" placeholder="Password" /><br>
+            <button type="submit">Register</button>
+        </form>
+        <div id="regError" class="error-message"></div>
+        <div id="regSuccess" class="success-message"></div>
+    </div>
+
+    <div class="divider">OR</div>
+
+    <!-- ===== Login ===== -->
+    <div class="form-box">
+        <h2>Login</h2>
+        <form id="loginForm">
+            <input type="email" id="login_email" placeholder="Email" /><br>
+            <input type="password" id="login_password" placeholder="Password" /><br>
+            <button type="submit">Login</button>
+        </form>
+        <div id="loginError" class="error-message"></div>
+        <div id="loginSuccess" class="success-message"></div>
+    </div>
+
+<script>
+    // -------- REGISTER ----------
+    const registerForm = document.getElementById('registerForm');
+    const regError = document.getElementById('regError');
+    const regSuccess = document.getElementById('regSuccess');
+
+    registerForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        regError.style.display = "none";
+        regSuccess.style.display = "none";
+
+        const username = document.getElementById('reg_username').value.trim();
+        const email = document.getElementById('reg_email').value.trim();
+        const password = document.getElementById('reg_password').value.trim();
+
+        try {
+            const response = await fetch('http://localhost:3000/api/auth/register', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ username, email, password })
+            });
+
+            const data = await response.json();
+
+            if (response.ok) {
+                regSuccess.textContent = data.message;
+                regSuccess.style.display = "block";
+            } else {
+                regError.textContent = data.error;
+                regError.style.display = "block";
+            }
+
+        } catch (err) {
+            regError.textContent = "A server connection error occurred";
+            regError.style.display = "block";
+        }
+    });
+
+    // -------- LOGIN ----------
+    const loginForm = document.getElementById('loginForm');
+    const loginError = document.getElementById('loginError');
+    const loginSuccess = document.getElementById('loginSuccess');
+
+    loginForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        loginError.style.display = "none";
+        loginSuccess.style.display = "none";
+
+const email = document.getElementById('login_email').value.trim();
+        const password = document.getElementById('login_password').value.trim();
+
+        try {
+            const response = await fetch('http://localhost:3000/api/auth/login', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email, password })
+            });
+
+            const data = await response.json();
+
+            if (response.ok) {
+                loginSuccess.textContent = data.message;
+                loginSuccess.style.display = "block";
+            } else {
+                loginError.textContent = data.error;
+                loginError.style.display = "block";
+            }
+
+        } catch (err) {
+            loginError.textContent = "A server connection error occurred";
+            loginError.style.display = "block";
+        }
+    });
+</script>
+
+</body>
+</html>
